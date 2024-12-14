@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гра: Вгадай число</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .game-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .feedback {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .input-container {
+            margin: 20px 0;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+        }
+
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .restart {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Вгадай число!</h1>
+        <p>Я загадав число від 1 до 100. Спробуй вгадати його!</p>
+        
+        <div class="input-container">
+            <input type="number" id="userInput" min="1" max="100" placeholder="Число">
+            <button id="guessButton">Вгадати</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+        <div class="result" id="result"></div>
+        
+        <button id="restartButton" class="restart" style="display: none;">Почати знову</button>
+    </div>
+
+    <script>
+        const userInput = document.getElementById('userInput');
+        const guessButton = document.getElementById('guessButton');
+        const feedback = document.getElementById('feedback');
+        const result = document.getElementById('result');
+        const restartButton = document.getElementById('restartButton');
+
+        let targetNumber;
+        let attempts;
+
+        // Функція для початку нової гри
+        function startGame() {
+            targetNumber = Math.floor(Math.random() * 100) + 1; // Загадав число від 1 до 100
+            attempts = 0;
+            feedback.textContent = '';
+            result.textContent = '';
+            guessButton.disabled = false;
+            restartButton.style.display = 'none';
+            userInput.value = '';
+        }
+
+        // Перевірка введеного числа
+        function checkGuess() {
+            const userGuess = Number(userInput.value);
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                feedback.textContent = 'Будь ласка, введіть число від 1 до 100.';
+                return;
+            }
+
+            attempts++;
+
+            if (userGuess > targetNumber) {
+                feedback.textContent = 'Спробуйте число менше!';
+            } else if (userGuess < targetNumber) {
+                feedback.textContent = 'Спробуйте число більше!';
+            } else {
+                feedback.textContent = `Вітаємо! Ви вгадали число за ${attempts} спроб.`;
+                result.textContent = `Правильне число: ${targetNumber}`;
+                guessButton.disabled = true;
+                restartButton.style.display = 'inline-block';
+            }
+        }
+
+        // Слухач для кнопки "Вгадати"
+        guessButton.addEventListener('click', checkGuess);
+
+        // Слухач для кнопки "Почати знову"
+        restartButton.addEventListener('click', startGame);
+
+        // Початок гри при завантаженні сторінки
+        startGame();
+    </script>
+
+</body>
+</html>
